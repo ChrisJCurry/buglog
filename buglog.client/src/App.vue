@@ -10,6 +10,7 @@
       Made with 💖 by CodeWorks
     </div>
   </footer>
+  <ReportBugModal />
 </template>
 
 <script>
