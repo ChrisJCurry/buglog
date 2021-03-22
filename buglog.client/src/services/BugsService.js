@@ -58,7 +58,7 @@ class BugsService {
     }
     try {
       await api.delete('/api/bugs/' + id)
-      this.getAll()
+      this.getById(id)
     } catch (err) {
       logger.error(err)
     }

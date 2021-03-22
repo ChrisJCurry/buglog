@@ -1,15 +1,13 @@
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import BaseController from '../utils/BaseController'
-import { bugsService } from '../services/BugsService'
 import { notesService } from '../services/NotesService'
 
-export class BugsController extends BaseController {
+export class NotesController extends BaseController {
   constructor() {
-    super('api/bugs')
+    super('api/notes')
     this.router
       .use(Auth0Provider.getAuthorizedUserInfo)
       .get('', this.getAll)
-      .get('/:bugId/notes', this.getNotesByBugId)
       .get('/:id', this.getById)
       .put('/:id', this.edit)
       .post('', this.create)
@@ -18,8 +16,8 @@ export class BugsController extends BaseController {
 
   async getAll(req, res, next) {
     try {
-      const bugs = await bugsService.find()
-      res.send(bugs)
+      const notes = await notesService.find()
+      res.send(notes)
     } catch (err) {
       next(err)
     }
@@ -27,17 +25,8 @@ export class BugsController extends BaseController {
 
   async getById(req, res, next) {
     try {
-      const bug = await bugsService.findById(req.params.id)
-      res.send(bug)
-    } catch (err) {
-      next(err)
-    }
-  }
-
-  async getNotesByBugId(req, res, next) {
-    try {
-      const notes = await notesService.find({ bug: req.params.bugId })
-      res.send(notes)
+      const note = await notesService.findById(req.params.id)
+      res.send(note)
     } catch (err) {
       next(err)
     }
@@ -47,10 +36,10 @@ export class BugsController extends BaseController {
     try {
       req.body.creatorId = req.userInfo.id
       req.body.creator = req.userInfo
-      const bug = await bugsService.create(req.body)
+      const note = await notesService.create(req.body)
       // @ts-ignore ESLint error. Think its a mongoose document. Runs fine.
-      bug.creator = req.userInfo
-      res.send(bug)
+      note.creator = req.userInfo
+      res.send(note)
     } catch (err) {
       next(err)
     }
@@ -58,9 +47,8 @@ export class BugsController extends BaseController {
 
   async edit(req, res, next) {
     try {
-      delete req.body.closed
-      const bug = await bugsService.edit(req.params.id, req.body)
-      res.send(bug)
+      const note = await notesService.edit(req.params.id, req.body)
+      res.send(note)
     } catch (err) {
       next(err)
     }
@@ -68,8 +56,8 @@ export class BugsController extends BaseController {
 
   async delete(req, res, next) {
     try {
-      const bug = await bugsService.delete(req.params.id)
-      res.send(bug)
+      const note = await notesService.delete(req.params.id)
+      res.send(note)
     } catch (err) {
       next(err)
     }

@@ -44,10 +44,6 @@
   </div>
 </template>
 
-/*
-
-// */
-
 <script>
 import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
