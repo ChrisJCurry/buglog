@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col" v-if="!state.bug.closed">
+        <div class="col-3 pl-5" v-if="!state.bug.closed">
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-note">
             Create Note
           </button>

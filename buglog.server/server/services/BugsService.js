@@ -36,7 +36,7 @@ class BugsService {
     if (bug.closed) {
       throw new BadRequest("Can't edit a closed bug.")
     }
-    return await dbContext.Bugs.findByIdAndUpdate(id, { description: update.description, title: update.title }, { new: true })
+    return await dbContext.Bugs.findOneAndUpdate({ _id: id, closed: false }, { description: update.description, title: update.title }, { new: true })
   }
 
   async delete(id) {

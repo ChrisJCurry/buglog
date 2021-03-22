@@ -8,8 +8,6 @@ class NotesService {
     try {
       const res = await api.get('api/bugs/' + bugId + '/notes')
       AppState.notes = res.data.map(n => new Note(n))
-      AppState.notes.forEach(n => this.getCreator(n))
-      logger.log(AppState.notes)
     } catch (err) {
       logger.error(err)
     }
@@ -29,7 +27,7 @@ class NotesService {
 
   async edit(note) {
     try {
-      await api.put('api/notes/' + note._id, note)
+      await api.put('api/notes/' + note.id, note)
     } catch (err) {
       logger.error(err)
     }
@@ -41,9 +39,8 @@ class NotesService {
       return
     }
     try {
-      await api.delete('/api/notes/' + note.id)
-      logger.log('indexOf: ', (AppState.notes.indexOf(note)), (AppState.notes.indexOf(note) + 1))
       AppState.notes.splice(AppState.notes.indexOf(note), 1)
+      await api.delete('/api/notes/' + note.id)
     } catch (err) {
       logger.error(err)
     }

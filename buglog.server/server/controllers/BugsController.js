@@ -2,7 +2,7 @@ import { Auth0Provider } from '@bcwdev/auth0provider'
 import BaseController from '../utils/BaseController'
 import { bugsService } from '../services/BugsService'
 import { notesService } from '../services/NotesService'
-import { logger } from '../utils/Logger'
+import { BadRequest } from '../utils/Errors'
 
 export class BugsController extends BaseController {
   constructor() {
@@ -61,7 +61,10 @@ export class BugsController extends BaseController {
   async edit(req, res, next) {
     try {
       delete req.body.closed
-      logger.log('Req body: ', req)
+      const bugClosed = await bugsService.findById(req.params.id)
+      if (bugClosed.closed) {
+        throw new BadRequest("You can't edit this when the bug is closed.")
+      }
       const bug = await bugsService.edit(req.params.id, req.body, req.userInfo.id)
       res.send(bug)
     } catch (err) {
