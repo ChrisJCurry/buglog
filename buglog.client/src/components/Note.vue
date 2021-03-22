@@ -1,11 +1,12 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <div class="card">
-          Hey there!
-        </div>
-      </div>
+  <div class="row py-1" v-if="note.creator">
+    <div class="col-8 ml-5 card">
+      {{ note.creator }}: {{ note.body }}
+    </div>
+    <div class="col-2 pl-0" v-if="state.user.email === note.creator">
+      <button type="button" class="btn btn-danger" @click="deleteNote">
+        x
+      </button>
     </div>
   </div>
 </template>
@@ -13,12 +14,12 @@
 <script>
 import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
-import { bugsService } from '../services/BugsService'
+import { notesService } from '../services/NotesService'
 
 export default {
   name: 'Note',
   props: {
-    bug: {
+    note: {
       type: Object, required: true
     }
   },
@@ -28,12 +29,15 @@ export default {
       user: computed(() => AppState.user)
     })
     onMounted(() => {
-      bugsService.getCreator(props.bug)
+      notesService.getCreator(props.note)
     })
     return {
       state,
       getDate(id) {
-        bugsService.getDate(id)
+        notesService.getDate(id)
+      },
+      async deleteNote() {
+        await notesService.delete(props.note)
       }
     }
   }

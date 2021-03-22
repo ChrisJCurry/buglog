@@ -1,74 +1,58 @@
 import { api } from './AxiosService'
 import { AppState } from '../AppState'
 import { logger } from '../utils/Logger'
-import { Bug } from '../models/Bug'
 import { Note } from '../models/Note'
 
-class BugsService {
-  async getAll() {
+class NotesService {
+  async getCreator(note) {
     try {
-      const res = await api.get('api/bugs')
-
-      AppState.bugs = res.data.map(b => new Bug(b))
-    } catch (error) {
-      logger.log(error)
-    }
-  }
-
-  async getById(id) {
-    try {
-      const res = await api.get('api/bugs/' + id)
-      AppState.bug = res.data
+      const res = await api.get('api/notes/' + note.id)
+      note.creator = res.data.creator.name
     } catch (err) {
       logger.error(err)
     }
   }
 
-  async getNotesById(id) {
+  async getByBugId(bugId) {
     try {
-      const res = await api.get('api/bugs/' + id + '/notes')
+      const res = await api.get('api/bugs/' + bugId + '/notes')
       AppState.notes = res.data.map(n => new Note(n))
+      AppState.notes.forEach(n => this.getCreator(n))
+      logger.log(AppState.notes)
     } catch (err) {
       logger.error(err)
     }
   }
 
-  async getCreator(bug) {
+  async create(note) {
     try {
-      const res = await api.get('api/bugs/' + bug.id)
-      bug.creator = res.data.creator.name
-    } catch (err) {
-      logger.error(err)
-    }
-  }
+      delete note.id
 
-  async create(bug) {
-    try {
-      delete bug.id
-      const res = await api.post('api/bugs', bug)
-      AppState.bugs.push(res.data)
+      const res = await api.post('api/notes', note)
+      AppState.notes.push(res.data)
       return res.data._id
     } catch (err) {
       logger.error(err)
     }
   }
 
-  async edit(bug) {
+  async edit(note) {
     try {
-      await api.put('api/bugs/' + bug._id, bug)
+      await api.put('api/notes/' + note._id, note)
     } catch (err) {
       logger.error(err)
     }
   }
 
-  async delete(id) {
-    const res = window.confirm('are you sure you want to close your bug?')
+  async delete(note) {
+    const res = window.confirm('are you sure you want to delete your note?')
     if (!res) {
       return
     }
     try {
-      await api.delete('/api/bugs/' + id)
-      this.getById(id)
+      await api.delete('/api/notes/' + note.id)
+      logger.log('indexOf: ', (AppState.notes.indexOf(note)), (AppState.notes.indexOf(note) + 1))
+      AppState.notes.splice(AppState.notes.indexOf(note), 1)
     } catch (err) {
       logger.error(err)
     }
@@ -95,4 +79,4 @@ class BugsService {
     return (n < 10 ? '0' : '') + n
   }
 }
-export const bugsService = new BugsService()
+export const notesService = new NotesService()

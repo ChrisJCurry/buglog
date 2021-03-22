@@ -11,6 +11,7 @@
     </div>
   </footer>
   <ReportBugModal />
+  <CreateNoteModal />
 </template>
 
 <script>

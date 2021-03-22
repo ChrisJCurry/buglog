@@ -2,6 +2,7 @@ import { Auth0Provider } from '@bcwdev/auth0provider'
 import BaseController from '../utils/BaseController'
 import { bugsService } from '../services/BugsService'
 import { notesService } from '../services/NotesService'
+import { BadRequest } from '../utils/Errors'
 
 export class BugsController extends BaseController {
   constructor() {
@@ -36,6 +37,7 @@ export class BugsController extends BaseController {
 
   async getNotesByBugId(req, res, next) {
     try {
+      // bugId is same as up in route with super('api/bugs')
       const notes = await notesService.find({ bug: req.params.bugId })
       res.send(notes)
     } catch (err) {
@@ -68,8 +70,14 @@ export class BugsController extends BaseController {
 
   async delete(req, res, next) {
     try {
-      const bug = await bugsService.delete(req.params.id)
-      res.send(bug)
+      const toDelete = await bugsService.findById(req.params.id)
+      if (toDelete.creatorId === req.userInfo.id) {
+        const bug = await bugsService.delete(req.params.id)
+
+        res.send(bug)
+      } else {
+        throw new BadRequest("You aren't the owner.")
+      }
     } catch (err) {
       next(err)
     }

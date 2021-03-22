@@ -13,15 +13,15 @@ const routes = [
     beforeEnter: authGuard
   },
   {
-    path: '/about',
-    name: 'About',
-    component: loadPage('AboutPage')
-  },
-  {
     path: '/bug/:id',
     name: 'BugDetails',
     component: loadPage('BugDetailsPage'),
     beforeEnter: authGuard
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: loadPage('AboutPage')
   },
   {
     path: '/account',

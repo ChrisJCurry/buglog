@@ -41,6 +41,14 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col" v-if="!state.bug.closed">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-note">
+          Create Note
+        </button>
+      </div>
+    </div>
+    <Note v-for="note in state.notes" :key="note.id" :note="note" />
   </div>
 </template>
 
@@ -55,10 +63,12 @@ export default {
     const route = useRoute()
     const state = reactive({
       bug: computed(() => AppState.bug),
+      notes: computed(() => AppState.notes),
       user: computed(() => AppState.user)
     })
     onMounted(() => {
       bugsService.getById(route.params.id)
+      bugsService.getNotesById(route.params.id)
     })
     onBeforeMount(() => {
       AppState.bug = {}

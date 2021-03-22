@@ -1,6 +1,7 @@
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import BaseController from '../utils/BaseController'
 import { notesService } from '../services/NotesService'
+import { logger } from '../utils/Logger'
 
 export class NotesController extends BaseController {
   constructor() {
@@ -17,6 +18,7 @@ export class NotesController extends BaseController {
   async getAll(req, res, next) {
     try {
       const notes = await notesService.find()
+      logger.log(res)
       res.send(notes)
     } catch (err) {
       next(err)
@@ -55,8 +57,9 @@ export class NotesController extends BaseController {
   }
 
   async delete(req, res, next) {
+    logger.log(req.params.id, req.userInfo.id)
     try {
-      const note = await notesService.delete(req.params.id)
+      const note = await notesService.delete(req.params.id, req.userInfo.id)
       res.send(note)
     } catch (err) {
       next(err)

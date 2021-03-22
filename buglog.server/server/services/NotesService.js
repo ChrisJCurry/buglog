@@ -35,8 +35,8 @@ class NotesService {
     return await dbContext.Notes.findByIdAndUpdate(id, { body: update.body }, { new: true })
   }
 
-  async delete(id) {
-    const res = await dbContext.Notes.findByIdAndDelete(id)
+  async delete(id, cId) {
+    const res = await dbContext.Notes.findOneAndDelete({ _id: id, creatorId: cId })
     return res
   }
 }
