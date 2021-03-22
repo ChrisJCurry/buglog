@@ -16,8 +16,7 @@ class NotesService {
   async create(note) {
     try {
       delete note.id
-
-      const res = await api.post('api/notes', note)
+      const res = await api.post('api/notes', { body: note.body, bug: note.bug.id })
       AppState.notes.push(res.data)
       return res.data._id
     } catch (err) {
@@ -39,8 +38,8 @@ class NotesService {
       return
     }
     try {
-      AppState.notes.splice(AppState.notes.indexOf(note), 1)
       await api.delete('/api/notes/' + note.id)
+      AppState.notes.splice(AppState.notes.indexOf(note), 1)
     } catch (err) {
       logger.error(err)
     }

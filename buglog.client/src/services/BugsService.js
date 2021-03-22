@@ -18,7 +18,7 @@ class BugsService {
   async getById(id) {
     try {
       const res = await api.get('api/bugs/' + id)
-      AppState.bug = res.data
+      AppState.bug = new Bug(res.data)
     } catch (err) {
       logger.error(err)
     }
@@ -46,7 +46,8 @@ class BugsService {
 
   async edit(bug) {
     try {
-      await api.put('api/bugs/' + bug._id, bug)
+      const res = await api.put('api/bugs/' + bug.id, bug)
+      this.getById(res.data._id)
     } catch (err) {
       logger.error(err)
     }

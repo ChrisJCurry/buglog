@@ -1,7 +1,6 @@
 import { dbContext } from '../db/DbContext'
 import { BadRequest } from '../utils/Errors'
 import { bugsService } from './BugsService'
-import { logger } from '../utils/Logger'
 
 class NotesService {
   async find(query = {}) {
@@ -32,7 +31,6 @@ class NotesService {
   async edit(id, update, userId) {
     const note = await this.findById(id)
     const bug = await bugsService.findById(note.bug)
-    logger.log('Stuff: ', id, update)
     if (note.creatorId !== userId) {
       throw new BadRequest("You can't edit this.")
     }

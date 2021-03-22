@@ -3,7 +3,7 @@
     <div class="row">
       <div class="card card-decoration col-10 offset-1 offset-md-0 col-md-12">
         <div class="row text-center">
-          <div class="col-1 col-md-6 border-right border-sm-bottom align-text-md-center">
+          <div class="col-12 col-md-6 border-right border-sm-bottom align-text-md-center">
             <div class="d-md-none">
               <h3><span class="border-sm-bottom">Issue</span></h3>
             </div>
@@ -14,7 +14,18 @@
                 </div>
               </div>
             </router-link>
-            posted on {{ bug.createdAt.split("T")[0] }} at {{ bug.createdAt.slice(11,19) }}
+            <div class="row">
+              <div class="col-12">
+                <h4>posted on {{ bug.createdAt.split("T")[0] }} <br> at {{ bug.createdAt.slice(11,19) }}</h4>
+              </div>
+            </div>
+            <div class="row" v-if="bug.updatedAt != bug.createdAt">
+              <div class="col-12">
+                <div>
+                  <h4>updated on {{ new Date(bug.updatedAt).toLocaleString() }} <br> at {{ bug.updatedAt.slice(11,19) }}</h4>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="col-12 col-md-4 border-sm-bottom border-right align-text-md-center">
             <div class="d-md-none">
