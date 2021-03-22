@@ -1,18 +1,22 @@
 <template>
   <div class="row py-1" v-if="note.creator">
     <div class="col-8 ml-5 card">
-      {{ note.creator }}: {{ note.body }}
+      <img class="comment-img pt-2" :src="note.creator.picture" />{{ note.creator.name }}: {{ note.body }}
     </div>
-    <div class="col-2 pl-0" v-if="state.user.email === note.creator">
-      <button type="button" class="btn btn-danger" @click="deleteNote">
-        x
-      </button>
+    <div v-if="state.bug">
+      <div v-if="!state.bug.closed">
+        <div class="col-2 pl-0" v-if="state.user.email === note.creator.email">
+          <button type="button" class="btn btn-danger" @click="deleteNote">
+            x
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { computed, onMounted, reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { AppState } from '../AppState'
 import { notesService } from '../services/NotesService'
 
@@ -26,10 +30,8 @@ export default {
   setup(props) {
     const state = reactive({
       bugs: computed(() => AppState.bugs),
+      bug: computed(() => AppState.bug),
       user: computed(() => AppState.user)
-    })
-    onMounted(() => {
-      notesService.getCreator(props.note)
     })
     return {
       state,
@@ -49,6 +51,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .comment-img {
+    height: 50%;
+    width: 5%;
   }
 
   @media(max-width:767px) {

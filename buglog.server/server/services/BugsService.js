@@ -3,7 +3,7 @@ import { BadRequest } from '../utils/Errors'
 
 class BugsService {
   async find(query = {}) {
-    const bugs = await dbContext.Bugs.find(query)
+    const bugs = await dbContext.Bugs.find(query).populate('creator', 'name email picture')
     return bugs
   }
 
@@ -28,9 +28,9 @@ class BugsService {
     return res
   }
 
-  async edit(id, update) {
+  async edit(id, update, userId) {
     const bug = await this.findById(id)
-    if (bug.creatorId !== update.creatorId) {
+    if (bug.creatorId !== userId) {
       throw new BadRequest("You can't edit this.")
     }
     if (bug.closed) {
@@ -40,7 +40,7 @@ class BugsService {
   }
 
   async delete(id) {
-    const res = await dbContext.Bugs.findByIdAndUpdate(id, { closed: true }, { new: true })
+    const res = await dbContext.Bugs.findOneAndUpdate({ _id: id }, { closed: true }, { new: true })
     return res
   }
 }

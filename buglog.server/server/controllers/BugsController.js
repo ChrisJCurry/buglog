@@ -2,15 +2,15 @@ import { Auth0Provider } from '@bcwdev/auth0provider'
 import BaseController from '../utils/BaseController'
 import { bugsService } from '../services/BugsService'
 import { notesService } from '../services/NotesService'
-import { BadRequest } from '../utils/Errors'
+import { logger } from '../utils/Logger'
 
 export class BugsController extends BaseController {
   constructor() {
     super('api/bugs')
     this.router
+      .get('/:bugId/notes', this.getNotesByBugId)
       .use(Auth0Provider.getAuthorizedUserInfo)
       .get('', this.getAll)
-      .get('/:bugId/notes', this.getNotesByBugId)
       .get('/:id', this.getById)
       .put('/:id', this.edit)
       .post('', this.create)
@@ -61,7 +61,8 @@ export class BugsController extends BaseController {
   async edit(req, res, next) {
     try {
       delete req.body.closed
-      const bug = await bugsService.edit(req.params.id, req.body)
+      logger.log('Req body: ', req)
+      const bug = await bugsService.edit(req.params.id, req.body, req.userInfo.id)
       res.send(bug)
     } catch (err) {
       next(err)
@@ -70,14 +71,8 @@ export class BugsController extends BaseController {
 
   async delete(req, res, next) {
     try {
-      const toDelete = await bugsService.findById(req.params.id)
-      if (toDelete.creatorId === req.userInfo.id) {
-        const bug = await bugsService.delete(req.params.id)
-
-        res.send(bug)
-      } else {
-        throw new BadRequest("You aren't the owner.")
-      }
+      const bug = await bugsService.delete(req.params.id)
+      res.send(bug)
     } catch (err) {
       next(err)
     }

@@ -33,15 +33,6 @@ class BugsService {
     }
   }
 
-  async getCreator(bug) {
-    try {
-      const res = await api.get('api/bugs/' + bug.id)
-      bug.creator = res.data.creator.name
-    } catch (err) {
-      logger.error(err)
-    }
-  }
-
   async create(bug) {
     try {
       delete bug.id

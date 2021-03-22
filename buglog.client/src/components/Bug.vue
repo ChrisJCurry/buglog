@@ -21,7 +21,8 @@
             </div>
             <div v-if="bug.creator" class="card-body">
               <div>
-                <h5>{{ bug.creator }}</h5>
+                <h5>{{ bug.creator.name }}</h5>
+                <img :src="bug.creator.picture" alt="Creator" />
               </div>
             </div>
           </div>
@@ -45,7 +46,7 @@
 </template>
 
 <script>
-import { computed, onMounted, reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { AppState } from '../AppState'
 import { bugsService } from '../services/BugsService'
 
@@ -60,9 +61,6 @@ export default {
     const state = reactive({
       bugs: computed(() => AppState.bugs),
       user: computed(() => AppState.user)
-    })
-    onMounted(() => {
-      bugsService.getCreator(props.bug)
     })
     return {
       state,

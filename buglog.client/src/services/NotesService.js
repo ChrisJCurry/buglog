@@ -4,15 +4,6 @@ import { logger } from '../utils/Logger'
 import { Note } from '../models/Note'
 
 class NotesService {
-  async getCreator(note) {
-    try {
-      const res = await api.get('api/notes/' + note.id)
-      note.creator = res.data.creator.name
-    } catch (err) {
-      logger.error(err)
-    }
-  }
-
   async getByBugId(bugId) {
     try {
       const res = await api.get('api/bugs/' + bugId + '/notes')
