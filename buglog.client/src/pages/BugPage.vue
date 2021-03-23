@@ -12,7 +12,7 @@
       <div class="col-12 col-md-2 pt-1">
         <div>
           <button type="button" class="btn btn-primary" @click="filterClosed">
-            {{ state.showClosed ? 'Show Closed' : 'Hide Closed' }}
+            {{ state.closed ? 'Show Closed' : 'Hide Closed' }}
           </button>
         </div>
       </div>
@@ -47,7 +47,7 @@ export default {
       bugs: computed(() => AppState.bugs),
       user: computed(() => AppState.user),
       account: computed(() => AppState.account),
-      showClosed: false
+      closed: false
     })
     onMounted(() => {
       bugsService.getAll()
@@ -56,8 +56,8 @@ export default {
       state,
       route,
       async filterClosed() {
-        await bugsService.filterClosed(state.showClosed)
-        state.showClosed = !state.showClosed
+        await bugsService.filterClosed(state.closed)
+        state.closed = !state.closed
       }
     }
   }
