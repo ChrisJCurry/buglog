@@ -1,6 +1,7 @@
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import BaseController from '../utils/BaseController'
 import { notesService } from '../services/NotesService'
+import { logger } from '../utils/Logger'
 
 export class NotesController extends BaseController {
   constructor() {
@@ -39,6 +40,7 @@ export class NotesController extends BaseController {
       const note = await notesService.create(req.body)
       // @ts-ignore ESLint error. Think its a mongoose document. Runs fine.
       note.creator = req.userInfo
+      logger.log(note.creator)
       res.send(note)
     } catch (err) {
       next(err)
