@@ -3,7 +3,7 @@
     <div class="row">
       <div class="card card-decoration col-10 offset-1 offset-md-0 col-md-12">
         <div class="row text-center">
-          <div class="col-12 col-md-6 border-right border-sm-bottom">
+          <div class="col-12 col-md-6 border-right border-sm-bottom align-text-center">
             <div class="row">
               <div class="col-12">
                 <div class="d-md-none">
@@ -101,6 +101,10 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .align-text-center title {
+    align-items: center;
   }
 
   .align-end {
