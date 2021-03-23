@@ -22,7 +22,11 @@ class NotesService {
     return note
   }
 
-  async create(newNote) {
+  async create(newNote, bugId) {
+    const bug = await bugsService.findById(bugId)
+    if (bug.closed) {
+      throw new BadRequest('You cant create on a closed bug.')
+    }
     const res = await dbContext.Notes.create(newNote)
 
     return res

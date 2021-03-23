@@ -29,6 +29,8 @@ class BugsService {
   }
 
   async edit(id, update, userId) {
+    delete update.closed
+
     const bug = await this.findById(id)
     if (bug.creatorId !== userId) {
       throw new BadRequest("You can't edit this.")

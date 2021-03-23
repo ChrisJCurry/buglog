@@ -37,10 +37,10 @@ export class NotesController extends BaseController {
     try {
       req.body.creatorId = req.userInfo.id
       req.body.creator = req.userInfo
-      const note = await notesService.create(req.body)
+      logger.log(req.body)
+      const note = await notesService.create(req.body, req.body.bug)
       // @ts-ignore ESLint error. Think its a mongoose document. Runs fine.
       note.creator = req.userInfo
-      logger.log(note.creator)
       res.send(note)
     } catch (err) {
       next(err)
