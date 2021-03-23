@@ -3,38 +3,50 @@
     <div class="row">
       <div class="card card-decoration col-10 offset-1 offset-md-0 col-md-12">
         <div class="row text-center">
-          <div class="col-12 col-md-6 border-right border-sm-bottom align-text-md-center">
-            <div class="d-md-none">
-              <h3><span class="border-sm-bottom">Issue</span></h3>
-            </div>
-            <router-link :to="{name: 'BugDetails', params: {id: bug.id}}">
-              <div class="card-body">
-                <div class="card-title">
-                  <h4>{{ bug.title }}</h4>
-                </div>
-              </div>
-            </router-link>
+          <div class="col-12 col-md-6 border-right border-sm-bottom">
             <div class="row">
               <div class="col-12">
-                <h4>posted on {{ bug.createdAt.split("T")[0] }} <br> at {{ bug.createdAt.slice(11,19) }}</h4>
+                <div class="d-md-none">
+                  <h3><span class="border-sm-bottom">Issue</span></h3>
+                </div>
+                <div class="card-body p-0">
+                  <div class="card-title">
+                    <router-link :to="{name: 'BugDetails', params: {id: bug.id}}">
+                      <h4>{{ bug.title }}</h4>
+                    </router-link>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="row" v-if="bug.updatedAt != bug.createdAt">
-              <div class="col-12">
+            <div class="row px-3 align-end d-none d-md-flex">
+              <div class="col-12 col-sm-4 col-md-6 text-left">
+                <h4>posted on <br>{{ new Date(bug.createdAt).toLocaleString() }}</h4>
+              </div>
+              <div class="col-12 col-sm-4 col-md-6 text-right" v-if="bug.updatedAt != bug.createdAt">
                 <div>
-                  <h4>updated on {{ new Date(bug.updatedAt).toLocaleString() }} <br> at {{ bug.updatedAt.slice(11,19) }}</h4>
+                  <h4>updated on <br>{{ new Date(bug.updatedAt).toLocaleString() }}</h4>
                 </div>
               </div>
             </div>
           </div>
           <div class="col-12 col-md-4 border-sm-bottom border-right align-text-md-center">
-            <div class="d-md-none">
-              <h3><span class="border-sm-bottom">Reported By</span></h3>
-            </div>
-            <div v-if="bug.creator" class="card-body">
-              <div>
-                <h5>{{ bug.creator.name }}</h5>
-                <img :src="bug.creator.picture" alt="Creator" />
+            <div class="row">
+              <div class="col-12">
+                <div class="d-md-none">
+                  <h3><span class="border-sm-bottom">Reported By</span></h3>
+                </div>
+                <div v-if="bug.creator" class="card-body">
+                  <div>
+                    <h5>{{ bug.creator.name }}</h5>
+                    <img :src="bug.creator.picture" alt="Creator" />
+                  </div>
+                  <div class="d-md-none">
+                    <h4>posted on <br>{{ new Date(bug.createdAt).toLocaleString() }}</h4>
+                    <div v-if="bug.updatedAt != bug.createdAt">
+                      <h4>updated on <br>{{ new Date(bug.updatedAt).toLocaleString() }}</h4>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -89,6 +101,12 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .align-end {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
   }
 
   @media(max-width:767px) {

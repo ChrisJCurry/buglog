@@ -2,11 +2,6 @@
   <div class="container-fluid" v-if="state.bug">
     <div v-if="!state.loading">
       <div class="row">
-        <div class="col-1 pl-5">
-          Title
-        </div>
-      </div>
-      <div class="row">
         <div class="col-8 pl-5">
           <h1>{{ state.bug.title }}</h1>
         </div>
@@ -16,9 +11,15 @@
           </button>
         </div>
       </div>
-      <div v-if="state.bug">
-        <div v-if="state.bug.updatedAt != state.bug.createdAt">
-          updated on {{ state.bug.updatedAt.split("T")[0] }} at {{ state.bug.updatedAt.slice(11,19) }}
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="col-12 ml-2 pl-4">
+            <div v-if="state.bug">
+              <div v-if="state.bug.updatedAt != state.bug.createdAt">
+                updated on {{ new Date(state.bug.updatedAt).toLocaleString() }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <form @submit.prevent="edit" v-if="!state.bug.closed">
@@ -91,7 +92,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-3 pl-5" v-if="!state.bug.closed">
+        <div class="col-10 offset-1 ml-sm-5 text-center" v-if="!state.bug.closed">
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-note">
             Create Note
           </button>
@@ -133,12 +134,12 @@ export default {
       state,
       route,
       async edit() {
-        bugsService.edit(state.bug)
+        await bugsService.edit(state.bug)
 
         state.editBug = false
       },
       async close() {
-        bugsService.delete(state.bug._id)
+        await bugsService.delete(state.bug.id)
       }
     }
   }

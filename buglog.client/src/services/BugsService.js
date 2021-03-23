@@ -33,6 +33,15 @@ class BugsService {
     }
   }
 
+  async filterClosed(toggle) {
+    if (toggle) {
+      const res = await api.get('api/bugs/')
+      AppState.bugs = res.data.map(b => new Bug(b))
+    } else {
+      AppState.bugs = AppState.bugs.filter(b => b.closed !== true)
+    }
+  }
+
   async create(bug) {
     try {
       delete bug.id

@@ -4,7 +4,7 @@ import { bugsService } from './BugsService'
 
 class NotesService {
   async find(query = {}) {
-    const notes = await dbContext.Notes.find(query).populate('creator', 'name picture email')
+    const notes = await dbContext.Notes.find(query).populate('creator', 'name picture email nickname')
     return notes
   }
 
@@ -15,7 +15,7 @@ class NotesService {
       'name picture email' = properties of the model reference in virtual field
 
     */
-    const note = await dbContext.Notes.findById(id).populate('creator', 'name picture email')
+    const note = await dbContext.Notes.findById(id).populate('creator', 'name picture email nickname')
     if (!note) {
       throw new BadRequest('Invalid Id')
     }

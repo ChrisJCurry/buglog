@@ -4,10 +4,17 @@
       <div class="col-12 col-md-6">
         <h1>Current bugs</h1>
       </div>
-      <div class="col-12 col-md-6 pt-1">
+      <div class="col-12 col-md-4 pt-1">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#report-bug">
           Report
         </button>
+      </div>
+      <div class="col-12 col-md-2 pt-1">
+        <div>
+          <button type="button" class="btn btn-primary" @click="filterClosed">
+            {{ state.showClosed ? 'Show Closed' : 'Hide Closed' }}
+          </button>
+        </div>
       </div>
     </div>
     <div class="row text-center bg-white font-weight-bold">
@@ -39,13 +46,19 @@ export default {
     const state = reactive({
       bugs: computed(() => AppState.bugs),
       user: computed(() => AppState.user),
-      account: computed(() => AppState.account)
+      account: computed(() => AppState.account),
+      showClosed: false
     })
     onMounted(() => {
       bugsService.getAll()
     })
     return {
-      state, route
+      state,
+      route,
+      async filterClosed() {
+        await bugsService.filterClosed(state.showClosed)
+        state.showClosed = !state.showClosed
+      }
     }
   }
 }
